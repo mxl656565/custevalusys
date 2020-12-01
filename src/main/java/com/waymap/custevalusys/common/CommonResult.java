@@ -52,7 +52,6 @@ public class CommonResult<T> {
 
     /**
      * 失败返回结果
-     * @param message 提示信息
      */
     public static <T> CommonResult<T> failed(String message) {
         return new CommonResult<T>(ResultCode.FAILED.getCode(), message, null);
@@ -67,7 +66,6 @@ public class CommonResult<T> {
 
     /**
      * 参数验证失败返回结果
-     * @param message 提示信息
      */
     public static <T> CommonResult<T> validateFailed(String message) {
         return new CommonResult<T>(ResultCode.VALIDATE_FAILED.getCode(), message, null);
@@ -79,4 +77,11 @@ public class CommonResult<T> {
     public static <T> CommonResult<T> unauthorized(T data) {
         return new CommonResult<T>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data);
     }
-}
+
+    /**
+     * 没有权限返回结果
+     */
+    public static <T> CommonResult<T> forbidden(String message){
+        return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(),message,null);
+
+    }}

@@ -6,3 +6,9 @@ spring:
     password: root
     url: jdbc:mysql://localhost:3306/custevalusys?serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: custevalusys-cust-secret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer '  #JWT负载中拿到开头

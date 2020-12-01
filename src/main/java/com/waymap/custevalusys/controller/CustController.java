@@ -7,15 +7,23 @@
  */
 package com.waymap.custevalusys.controller;
 
+import com.waymap.custevalusys.common.Asserts;
 import com.waymap.custevalusys.common.CommonResult;
+import com.waymap.custevalusys.dto.CustLoginParm;
 import com.waymap.custevalusys.model.Customer;
+import com.waymap.custevalusys.service.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author : tiger
@@ -27,9 +35,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/Cust")
 public class CustController {
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+    @Autowired
+    private CustomerService customerService;
+
     @ApiOperation(value = "用户登录校验")
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public CommonResult login(@Validated @RequestBody Customer customer){
-        return null;
+    public CommonResult login(@Validated @RequestBody CustLoginParm customerLoginParm){
+        String token = customerService.login(customerLoginParm.getUsername(),customerLoginParm.getPassword());
+        System.out.println(token);
+        if(token == null){
+            return CommonResult.validateFailed("用户名或密码错误");
+        }
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        tokenMap.put("tokenHead", tokenHead);
+        return CommonResult.success(tokenMap);
+    }
+
+    @ApiOperation(value = "创建账户")
+    @RequestMapping(value = "/createcount",method = RequestMethod.POST)
+    public CommonResult createCount(@Validated @RequestBody CustLoginParm custLoginParm){
+        Customer customer = customerService.createCount(custLoginParm);
+        if(customer == null){
+            Asserts.fail("用户名重复");
+        }
+        return CommonResult.success(customer);
     }
 }

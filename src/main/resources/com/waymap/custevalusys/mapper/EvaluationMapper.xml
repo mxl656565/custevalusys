@@ -7,9 +7,81 @@
     <result column="points" jdbcType="INTEGER" property="points" />
     <result column="evaluatime" jdbcType="TIMESTAMP" property="evaluatime" />
   </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
   <sql id="Base_Column_List">
     id, question, points, evaluatime
   </sql>
+  <select id="selectByExample" parameterType="com.waymap.custevalusys.model.EvaluationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from evaluation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -20,18 +92,27 @@
     delete from evaluation
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByExample" parameterType="com.waymap.custevalusys.model.EvaluationExample">
+    delete from evaluation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
   <insert id="insert" parameterType="com.waymap.custevalusys.model.Evaluation">
-    insert into evaluation (id, question, points, 
-      evaluatime)
-    values (#{id,jdbcType=INTEGER}, #{question,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, 
-      #{evaluatime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into evaluation (question, points, evaluatime
+      )
+    values (#{question,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{evaluatime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.waymap.custevalusys.model.Evaluation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into evaluation
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="question != null">
         question,
       </if>
@@ -43,9 +124,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="question != null">
         #{question,jdbcType=INTEGER},
       </if>
@@ -57,6 +135,42 @@
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.waymap.custevalusys.model.EvaluationExample" resultType="java.lang.Long">
+    select count(*) from evaluation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update evaluation
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.question != null">
+        question = #{record.question,jdbcType=INTEGER},
+      </if>
+      <if test="record.points != null">
+        points = #{record.points,jdbcType=INTEGER},
+      </if>
+      <if test="record.evaluatime != null">
+        evaluatime = #{record.evaluatime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update evaluation
+    set id = #{record.id,jdbcType=INTEGER},
+      question = #{record.question,jdbcType=INTEGER},
+      points = #{record.points,jdbcType=INTEGER},
+      evaluatime = #{record.evaluatime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.waymap.custevalusys.model.Evaluation">
     update evaluation
     <set>

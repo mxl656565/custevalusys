@@ -14,4 +14,5 @@ package com.waymap.custevalusys.service;
  * @date : 2020/11/30
  */
 public interface ConsultantService {
+
 }

@@ -41,11 +41,23 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成全部表tableName设为%-->
-        <table tableName="customer" domainObjectName="Customer" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" ></table>
-        <table tableName="consultant_customer_relation" domainObjectName="ConsultantCustomerRelation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" ></table>
-        <table tableName="consultant_evaluation_relation" domainObjectName="ConsultantEvaluationRelation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" ></table>
-        <table tableName="consultant" domainObjectName="Consultant" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" ></table>
-        <table tableName="evaluation" domainObjectName="Evaluation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" ></table>
-        <table tableName="project" domainObjectName="Project" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" ></table>
+        <table tableName="customer" domainObjectName="Customer" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="consultant_customer_relation" domainObjectName="ConsultantCustomerRelation" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="consultant_evaluation_relation" domainObjectName="ConsultantEvaluationRelation" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="consultant" domainObjectName="Consultant" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="evaluation" domainObjectName="Evaluation" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="project" domainObjectName="Project" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>
