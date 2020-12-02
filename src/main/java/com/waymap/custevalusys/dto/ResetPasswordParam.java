@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
  * @date : 2020/12/1
  */
 @Data
-public class UpdateAdminPasswordParam {
+public class ResetPasswordParam {
     @NotEmpty
     @ApiModelProperty(value = "用户名", required = true)
     private String username;

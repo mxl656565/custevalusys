@@ -1,11 +1,12 @@
 package com.waymap.custevalusys.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.waymap.custevalusys.model.Project;
 import com.waymap.custevalusys.model.ProjectExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface ProjectMapper {
+public interface ProjectMapper extends BaseMapper<Project> {
     long countByExample(ProjectExample example);
 
     int deleteByExample(ProjectExample example);

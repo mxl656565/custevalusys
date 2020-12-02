@@ -7,8 +7,9 @@
  */
 package com.waymap.custevalusys.service;
 
+import com.waymap.custevalusys.dto.CreateCountParm;
 import com.waymap.custevalusys.dto.CustLoginParm;
-import com.waymap.custevalusys.dto.UpdateAdminPasswordParam;
+import com.waymap.custevalusys.dto.ResetPasswordParam;
 import com.waymap.custevalusys.model.Customer;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,7 +31,7 @@ public interface CustomerService {
     /**
      * 添加账号
      */
-    Customer createCount(CustLoginParm custLoginParm);
+    Customer createCount(CreateCountParm createCountParm);
 
     /**
      * 通过username获取用户信息
@@ -57,7 +58,7 @@ public interface CustomerService {
      * @param updatePasswordParam
      * @return 修改成功返回1，失败返回0
      */
-    int updatePassword(UpdateAdminPasswordParam updatePasswordParam);
+    int updatePassword(ResetPasswordParam updatePasswordParam);
 
     /**
      * 根据用户名获取用户信息

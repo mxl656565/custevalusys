@@ -9,11 +9,16 @@ package com.waymap.custevalusys.controller;
 
 import com.waymap.custevalusys.common.Asserts;
 import com.waymap.custevalusys.common.CommonResult;
+import com.waymap.custevalusys.dto.CreateCountParm;
 import com.waymap.custevalusys.dto.CustLoginParm;
+import com.waymap.custevalusys.dto.ResetPasswordParam;
 import com.waymap.custevalusys.model.Customer;
 import com.waymap.custevalusys.service.CustomerService;
+import com.waymap.custevalusys.serviceimpl.CustomerServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -42,11 +47,12 @@ public class CustController {
     @Autowired
     private CustomerService customerService;
 
-    @ApiOperation(value = "用户登录校验")
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustController.class);
+
+    @ApiOperation(value = "用户登录")
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public CommonResult login(@Validated @RequestBody CustLoginParm customerLoginParm){
         String token = customerService.login(customerLoginParm.getUsername(),customerLoginParm.getPassword());
-        System.out.println(token);
         if(token == null){
             return CommonResult.validateFailed("用户名或密码错误");
         }
@@ -56,13 +62,23 @@ public class CustController {
         return CommonResult.success(tokenMap);
     }
 
-    @ApiOperation(value = "创建账户")
-    @RequestMapping(value = "/createcount",method = RequestMethod.POST)
-    public CommonResult createCount(@Validated @RequestBody CustLoginParm custLoginParm){
-        Customer customer = customerService.createCount(custLoginParm);
-        if(customer == null){
-            Asserts.fail("用户名重复");
+    @ApiOperation(value = "创建账号")
+    @RequestMapping(value = "/createCount",method = RequestMethod.POST)
+    public CommonResult createCount(@Validated @RequestBody CreateCountParm createCountParm){
+            Customer customer = customerService.createCount(createCountParm);
+            if(customer == null){
+                return CommonResult.failed("用户名已存在");
+            }
+            return CommonResult.success(customer);
+    }
+
+    @ApiOperation(value = "修改密码")
+    @RequestMapping(value = "/resetPassword",method = RequestMethod.POST)
+    public CommonResult resetPassword(@Validated @RequestBody ResetPasswordParam param){
+        int flag = customerService.updatePassword(param);
+        if(flag==-1){
+            return CommonResult.failed("修改密码失败，原密码错误");
         }
-        return CommonResult.success(customer);
+        return CommonResult.success(null,"修改密码成功");
     }
 }

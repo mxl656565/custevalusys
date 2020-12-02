@@ -13,9 +13,16 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author : tiger
@@ -32,8 +39,13 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.waymap.custevalusys.controller"))
+                //为有@Api注解的Controller生成API文档
+//              .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                //为有@ApiOperation注解的方法生成API文档
+//              .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .securitySchemes(securitySchemes());
     }
     protected ApiInfo apiInfo(){
         return new ApiInfoBuilder()
@@ -41,5 +53,12 @@ public class Swagger2Config {
                 .description("custevalusys")
                 .version("1.0")
                 .build();
+    }
+    private List<ApiKey> securitySchemes() {
+        //设置请求头信息
+        List<ApiKey> result = new ArrayList<>();
+        ApiKey apiKey = new ApiKey("Authorization", "Authorization", "header");
+        result.add(apiKey);
+        return result;
     }
 }

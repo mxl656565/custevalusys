@@ -11,17 +11,22 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.waymap.custevalusys.bo.CustUserDetails;
 import com.waymap.custevalusys.common.Asserts;
+import com.waymap.custevalusys.dto.CreateCountParm;
 import com.waymap.custevalusys.dto.CustLoginParm;
-import com.waymap.custevalusys.dto.UpdateAdminPasswordParam;
+import com.waymap.custevalusys.dto.ResetPasswordParam;
 import com.waymap.custevalusys.mapper.CustomerMapper;
 import com.waymap.custevalusys.model.Customer;
+import com.waymap.custevalusys.model.Project;
 import com.waymap.custevalusys.service.CustomerService;
+import com.waymap.custevalusys.service.ProjectService;
 import com.waymap.custevalusys.util.JwtTokenUtil;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,45 +45,64 @@ import java.util.List;
 @SuppressWarnings("all")
 public class CustomerServiceImpl implements CustomerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerServiceImpl.class);
+    @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private CustomerMapper customerMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ProjectService projectService;
+
     @Override
     public String login(String username, String password) {
         String token = null;
         try{
             UserDetails userDetails = getUserDetailsByusername(username);
+            System.out.println(userDetails.getUsername()+"----"+userDetails.getPassword());
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 Asserts.fail("密码不正确");
             }
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,null,null);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println(SecurityContextHolder.getContext().getAuthentication());
             token = jwtTokenUtil.generateToken(userDetails);
-        }catch (RuntimeException e){
+        }catch (AuthenticationException e){
             LOGGER.warn("登录异常:{}",e.getMessage());
         }
         return token;
     }
 
     @Override
-    public Customer createCount(CustLoginParm custLoginParm) {
-        Customer customer = new Customer();
-        BeanUtils.copyProperties(custLoginParm,customer);
-        QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username",customer.getUsername());
-        List<Customer> customers =  customerMapper.selectList(queryWrapper);
-        if(customers.size()>0){
-            return null;
+    public Customer createCount(CreateCountParm createCountParm) {
+        try{
+            Customer customer = new Customer();
+            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("username",createCountParm.getUsername());
+            List<Customer> customers = customerMapper.selectList(queryWrapper);
+            if(customers.size()>0){
+                return null;
+            }
+            customer.setUsername(createCountParm.getUsername());
+            String enablePasswrod = passwordEncoder.encode(createCountParm.getPassword());
+            customer.setPassword(enablePasswrod);
+            customer.setNickname(createCountParm.getNickname());
+            Project project = projectService.findProjectIdByProject(createCountParm.getProjectName());
+            if(project==null){
+                project.setProjectname(createCountParm.getProjectName());
+                int rows = projectService.insertProject(project);
+                if(rows == -1){
+                    Asserts.fail("创建用户失败,请重新再试一次");
+                }
+                project = projectService.findProjectIdByProject(createCountParm.getProjectName());
+            }
+            customer.setProjectId(project.getId());
+            customerMapper.insert(customer);
+            return customer;
+        }catch (Exception e){
+            LOGGER.error("创建用户异常:{}",e.getMessage());
         }
-        String enablePassword = passwordEncoder.encode(customer.getPassword());
-        customer.setPassword(enablePassword);
-        customerMapper.insert(customer);
-        return customer;
+        return null;
     }
-
 
     @Override
     public Customer getCustByUsername(String username) {
@@ -99,17 +123,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public int updatePassword(UpdateAdminPasswordParam updatePasswordParam) {
-        if(StrUtil.isEmpty(updatePasswordParam.getUsername())||
-                StrUtil.isEmpty(updatePasswordParam.getNewPassword())||
-                StrUtil.isEmpty(updatePasswordParam.getOldPassword())){
-            return -1;
-        }
+    public int updatePassword(ResetPasswordParam updatePasswordParam) {
         QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",updatePasswordParam.getUsername());
         Customer customer = customerMapper.selectOne(queryWrapper);
         if(!passwordEncoder.matches(updatePasswordParam.getOldPassword(),customer.getPassword())){
-            return -2;
+            return -1;
         }
         customer.setPassword(passwordEncoder.encode(updatePasswordParam.getNewPassword()));
         customerMapper.updateByPrimaryKey(customer);
