@@ -1,18 +1,17 @@
 package com.waymap.custevalusys.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.waymap.custevalusys.model.Evaluation;
 import com.waymap.custevalusys.model.EvaluationExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface EvaluationMapper {
+public interface EvaluationMapper extends BaseMapper<Evaluation> {
     long countByExample(EvaluationExample example);
 
     int deleteByExample(EvaluationExample example);
 
     int deleteByPrimaryKey(Integer id);
-
-    int insert(Evaluation record);
 
     int insertSelective(Evaluation record);
 

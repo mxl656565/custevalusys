@@ -3,14 +3,14 @@ package com.waymap.custevalusys.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsultantCustomerRelationExample {
+public class CustomerEvaluationRelationExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ConsultantCustomerRelationExample() {
+    public CustomerEvaluationRelationExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -164,66 +164,6 @@ public class ConsultantCustomerRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andConsultantIdIsNull() {
-            addCriterion("consultant_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdIsNotNull() {
-            addCriterion("consultant_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdEqualTo(Integer value) {
-            addCriterion("consultant_id =", value, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdNotEqualTo(Integer value) {
-            addCriterion("consultant_id <>", value, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdGreaterThan(Integer value) {
-            addCriterion("consultant_id >", value, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("consultant_id >=", value, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdLessThan(Integer value) {
-            addCriterion("consultant_id <", value, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdLessThanOrEqualTo(Integer value) {
-            addCriterion("consultant_id <=", value, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdIn(List<Integer> values) {
-            addCriterion("consultant_id in", values, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdNotIn(List<Integer> values) {
-            addCriterion("consultant_id not in", values, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdBetween(Integer value1, Integer value2) {
-            addCriterion("consultant_id between", value1, value2, "consultantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andConsultantIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("consultant_id not between", value1, value2, "consultantId");
-            return (Criteria) this;
-        }
-
         public Criteria andCustomerIdIsNull() {
             addCriterion("customer_id is null");
             return (Criteria) this;
@@ -281,6 +221,66 @@ public class ConsultantCustomerRelationExample {
 
         public Criteria andCustomerIdNotBetween(Integer value1, Integer value2) {
             addCriterion("customer_id not between", value1, value2, "customerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdIsNull() {
+            addCriterion("evaluation_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdIsNotNull() {
+            addCriterion("evaluation_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdEqualTo(Integer value) {
+            addCriterion("evaluation_id =", value, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdNotEqualTo(Integer value) {
+            addCriterion("evaluation_id <>", value, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdGreaterThan(Integer value) {
+            addCriterion("evaluation_id >", value, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("evaluation_id >=", value, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdLessThan(Integer value) {
+            addCriterion("evaluation_id <", value, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdLessThanOrEqualTo(Integer value) {
+            addCriterion("evaluation_id <=", value, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdIn(List<Integer> values) {
+            addCriterion("evaluation_id in", values, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdNotIn(List<Integer> values) {
+            addCriterion("evaluation_id not in", values, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdBetween(Integer value1, Integer value2) {
+            addCriterion("evaluation_id between", value1, value2, "evaluationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEvaluationIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("evaluation_id not between", value1, value2, "evaluationId");
             return (Criteria) this;
         }
     }

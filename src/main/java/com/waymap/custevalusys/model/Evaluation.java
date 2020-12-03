@@ -1,10 +1,13 @@
 package com.waymap.custevalusys.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Evaluation implements Serializable {
+    @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "评价id")
     private Integer id;
 

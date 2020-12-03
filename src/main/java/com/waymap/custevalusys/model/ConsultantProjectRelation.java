@@ -5,13 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
-public class Project implements Serializable {
+public class ConsultantProjectRelation implements Serializable {
     @TableId(type = IdType.AUTO)
-    @ApiModelProperty(value = "项目id")
     private Integer id;
 
-    @ApiModelProperty(value = "项目名称")
-    private String projectname;
+    @ApiModelProperty(value = "顾问id")
+    private Integer consultantId;
+
+    @ApiModelProperty(value = "项目id")
+    private Integer projectId;
 
     private static final long serialVersionUID = 1L;
 
@@ -23,12 +25,20 @@ public class Project implements Serializable {
         this.id = id;
     }
 
-    public String getProjectname() {
-        return projectname;
+    public Integer getConsultantId() {
+        return consultantId;
     }
 
-    public void setProjectname(String projectname) {
-        this.projectname = projectname == null ? null : projectname.trim();
+    public void setConsultantId(Integer consultantId) {
+        this.consultantId = consultantId;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     @Override
@@ -38,7 +48,8 @@ public class Project implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", projectname=").append(projectname);
+        sb.append(", consultantId=").append(consultantId);
+        sb.append(", projectId=").append(projectId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -41,22 +41,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String authHeader = request.getHeader(this.tokenHeader);
-        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
-            // The part after "Bearer "
-            String authToken = authHeader.substring(this.tokenHead.length());
-            String username = jwtTokenUtil.getUserNameFromToken(authToken);
+        if (authHeader != null ) {
+            String username = jwtTokenUtil.getUserNameFromToken(authHeader);
             LOGGER.info("checking username:{}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+                if (jwtTokenUtil.validateToken(authHeader, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     LOGGER.info("authenticated user:{}", username);

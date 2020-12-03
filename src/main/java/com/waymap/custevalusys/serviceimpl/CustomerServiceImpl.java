@@ -7,12 +7,10 @@
  */
 package com.waymap.custevalusys.serviceimpl;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.waymap.custevalusys.bo.CustUserDetails;
 import com.waymap.custevalusys.common.Asserts;
 import com.waymap.custevalusys.dto.CreateCountParm;
-import com.waymap.custevalusys.dto.CustLoginParm;
 import com.waymap.custevalusys.dto.ResetPasswordParam;
 import com.waymap.custevalusys.mapper.CustomerMapper;
 import com.waymap.custevalusys.model.Customer;
@@ -20,10 +18,8 @@ import com.waymap.custevalusys.model.Project;
 import com.waymap.custevalusys.service.CustomerService;
 import com.waymap.custevalusys.service.ProjectService;
 import com.waymap.custevalusys.util.JwtTokenUtil;
-import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -59,7 +55,6 @@ public class CustomerServiceImpl implements CustomerService {
         String token = null;
         try{
             UserDetails userDetails = getUserDetailsByusername(username);
-            System.out.println(userDetails.getUsername()+"----"+userDetails.getPassword());
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 Asserts.fail("密码不正确");
             }
@@ -74,8 +69,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer createCount(CreateCountParm createCountParm) {
-        try{
             Customer customer = new Customer();
+            Project newProject = new Project();
+        try{
             QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("username",createCountParm.getUsername());
             List<Customer> customers = customerMapper.selectList(queryWrapper);
@@ -86,22 +82,19 @@ public class CustomerServiceImpl implements CustomerService {
             String enablePasswrod = passwordEncoder.encode(createCountParm.getPassword());
             customer.setPassword(enablePasswrod);
             customer.setNickname(createCountParm.getNickname());
-            Project project = projectService.findProjectIdByProject(createCountParm.getProjectName());
+            Project project = projectService.findProjectByProjectName(createCountParm.getProjectname());
             if(project==null){
-                project.setProjectname(createCountParm.getProjectName());
-                int rows = projectService.insertProject(project);
-                if(rows == -1){
-                    Asserts.fail("创建用户失败,请重新再试一次");
-                }
-                project = projectService.findProjectIdByProject(createCountParm.getProjectName());
+                newProject.setProjectname(createCountParm.getProjectname());
+                projectService.insertProject(newProject);
+                newProject = projectService.findProjectByProjectName(newProject.getProjectname());
+                customer.setProjectId(newProject.getId());
             }
-            customer.setProjectId(project.getId());
+            customer.setProjectId(newProject.getId());
             customerMapper.insert(customer);
-            return customer;
         }catch (Exception e){
             LOGGER.error("创建用户异常:{}",e.getMessage());
         }
-        return null;
+        return customer;
     }
 
     @Override

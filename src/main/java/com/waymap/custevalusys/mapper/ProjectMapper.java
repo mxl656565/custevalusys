@@ -13,8 +13,6 @@ public interface ProjectMapper extends BaseMapper<Project> {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Project record);
-
     int insertSelective(Project record);
 
     List<Project> selectByExample(ProjectExample example);

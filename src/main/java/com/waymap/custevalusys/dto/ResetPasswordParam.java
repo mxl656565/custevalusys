@@ -9,6 +9,8 @@ package com.waymap.custevalusys.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -18,7 +20,8 @@ import javax.validation.constraints.NotEmpty;
  * @email : tiger.liu@waymap.cn
  * @date : 2020/12/1
  */
-@Data
+@Getter
+@Setter
 public class ResetPasswordParam {
     @NotEmpty
     @ApiModelProperty(value = "用户名", required = true)

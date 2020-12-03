@@ -27,11 +27,10 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectMapper projectMapper;
 
     @Override
-    public Integer findProjectIdByProjectName(String projectName) {
+    public Project findProjectByProjectName(String projectName) {
         QueryWrapper<Project> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("projectname",projectName);
-        Project project  = projectMapper.selectOne(queryWrapper);
-        return project.getId();
+        return projectMapper.selectOne(queryWrapper);
     }
 
     @Override

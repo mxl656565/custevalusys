@@ -45,6 +45,7 @@ public class Swagger2Config {
 //              .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
+                //开启请求头Authorization参数
                 .securitySchemes(securitySchemes());
     }
     protected ApiInfo apiInfo(){

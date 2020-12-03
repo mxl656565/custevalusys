@@ -17,7 +17,6 @@ package com.waymap.custevalusys.config;
 import com.waymap.custevalusys.bo.CustUserDetails;
 import com.waymap.custevalusys.component.JwtAuthenticationTokenFilter;
 import com.waymap.custevalusys.component.RestAuthenticationEntryPoint;
-import com.waymap.custevalusys.controller.CustController;
 import com.waymap.custevalusys.model.Customer;
 import com.waymap.custevalusys.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -44,7 +42,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomerService customerService;
@@ -69,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs/**"
                 )
                 .permitAll()
-                .antMatchers("/Cust/login","/Cust/createCount","/Cust/resetPassword")// 对登录注册要允许匿名访问
+                .antMatchers("/customer/login","/customer/create","/customer/resetPassword")// 对登录注册要允许匿名访问
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS)//跨域请求会先进行一次options请求
                 .permitAll()

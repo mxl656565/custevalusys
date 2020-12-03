@@ -1,10 +1,13 @@
 package com.waymap.custevalusys.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Customer implements Serializable {
+    @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "客户id")
     private Integer id;
 

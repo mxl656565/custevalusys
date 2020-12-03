@@ -10,6 +10,8 @@ package com.waymap.custevalusys.dto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -20,7 +22,8 @@ import javax.validation.constraints.NotNull;
  * @email : tiger.liu@waymap.cn
  * @date : 2020/12/2
  */
-@Data
+@Getter
+@Setter
 public class CreateCountParm {
     @NotEmpty
     @ApiModelProperty(value = "用户名",required = true)
@@ -36,5 +39,5 @@ public class CreateCountParm {
 
     @NotEmpty
     @ApiModelProperty(value = "项目名称",required = true)
-    private String projectName;
+    private String projectname;
 }

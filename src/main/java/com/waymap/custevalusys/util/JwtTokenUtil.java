@@ -35,8 +35,6 @@ public class JwtTokenUtil {
     private String secret;
     @Value("${jwt.expiration}")
     private Long expiration;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
 
     /**
      * 根据负责生成JWT的token
@@ -132,22 +130,18 @@ public class JwtTokenUtil {
         if(StrUtil.isEmpty(oldToken)){
             return null;
         }
-        String token = oldToken.substring(tokenHead.length());
-        if(StrUtil.isEmpty(token)){
-            return null;
-        }
         //token校验不通过
-        Claims claims = getClaimsFromToken(token);
+        Claims claims = getClaimsFromToken(oldToken);
         if(claims==null){
             return null;
         }
         //如果token已经过期，不支持刷新
-        if(isTokenExpired(token)){
+        if(isTokenExpired(oldToken)){
             return null;
         }
         //如果token在30分钟之内刚刷新过，返回原token
-        if(tokenRefreshJustBefore(token,30*60)){
-            return token;
+        if(tokenRefreshJustBefore(oldToken,30*60)){
+            return oldToken;
         }else{
             claims.put(CLAIM_KEY_CREATED, new Date());
             return generateToken(claims);

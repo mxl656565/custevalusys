@@ -20,7 +20,7 @@ public interface ProjectService {
     /**
      * 通过项目名称查询项目
      */
-    Project findProjectIdByProject(String projectName);
+    Project findProjectByProjectName(String projectName);
 
     /**
      * 插入新的项目
