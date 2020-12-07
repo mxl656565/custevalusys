@@ -13,6 +13,8 @@ import com.waymap.custevalusys.dto.ResetPasswordParam;
 import com.waymap.custevalusys.model.Customer;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
+
 /**
  * @author : tiger
  * @description : 用户service
@@ -72,4 +74,12 @@ public interface CustomerService {
      * @return security的UserDetails
      */
     UserDetails getUserDetailsByusername(String username);
+
+    /**
+     * 分页获取用户意见详情
+     * @param pageNum  当前页数
+     * @param pageSize 每页显示页数
+     * @return 用户意见详情
+     */
+    List<Customer> getCustFeedBack(Integer pageNum,Integer pageSize);
 }

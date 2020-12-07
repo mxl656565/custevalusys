@@ -10,6 +10,12 @@
     <result column="feedback" jdbcType="VARCHAR" property="feedback" />
     <result column="evaluatime" jdbcType="TIMESTAMP" property="evaluatime" />
   </resultMap>
+  <resultMap id="CustResultMap" type="com.waymap.custevalusys.dto.CustFeedBackParm">
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="projectname" jdbcType="VARCHAR" property="projectname" />
+    <result column="feedback" jdbcType="VARCHAR" property="feedback" />
+    <result column="evaluatime" jdbcType="TIMESTAMP" property="evaluatime" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -90,6 +96,9 @@
     <include refid="Base_Column_List" />
     from customer
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCustFeedBackInfo" resultMap="CustResultMap">
+    select cust.nickname,n.projectname,cust.feedback,cust.evaluatime from customer as cust,(select p.projectname from project p,customer c where c.project_id=p.id) n
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from customer

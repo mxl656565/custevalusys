@@ -25,11 +25,11 @@ public class ConsultantEvalution {
     @ApiModelProperty(value = "评估日期")
     private Date evaluatime;
     @ApiModelProperty(value = "评估人")
-    private String customerName;
+    private String username;
     @ApiModelProperty(value = "顾问姓名")
     private String consultantName;
     @ApiModelProperty(value = "评估项")
     private Integer question;
     @ApiModelProperty(value = "分值")
-    private Integer point;
+    private Integer points;
 }

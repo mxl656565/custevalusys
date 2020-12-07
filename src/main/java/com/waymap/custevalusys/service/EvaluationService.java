@@ -39,5 +39,5 @@ public interface EvaluationService {
      * @param projectId 项目ID
      * @return 顾问评估清单
      */
-    List<ConsultantEvalutionListParm> selectCustEvaluationList(Integer projectId);
+    ConsultantEvalutionListParm selectCustEvaluationList(Integer projectId,Integer pageNum,Integer pageSize);
 }

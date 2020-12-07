@@ -7,6 +7,13 @@
     <result column="points" jdbcType="INTEGER" property="points" />
     <result column="evaluatime" jdbcType="TIMESTAMP" property="evaluatime" />
   </resultMap>
+  <resultMap id="EvaluationResultMap" type="com.waymap.custevalusys.dto.ConsultantEvalution">
+    <result column="question" jdbcType="INTEGER" property="question" />
+    <result column="points" jdbcType="INTEGER" property="points" />
+    <result column="evaluatime" jdbcType="TIMESTAMP" property="evaluatime" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="consultant_name" jdbcType="VARCHAR" property="consultantName" />
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -81,6 +88,12 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+  <select id="selectEvaluationByProjectId" resultMap="EvaluationResultMap">
+    select n.username,consultant.`name` as consultant_name,n.question,n.points,n.evaluatime from consultant,
+    (select cer.consultant_id,cer.evaluation_id,m.question,m.points,m.evaluatime,m.username from consultant_evaluation_relation as cer,
+    (select b.username,e.id,e.evaluatime,e.points,e.question from evaluation e,
+    (select cust.username,evaluation_id from customer cust,customer_evaluation_relation a where cust.project_id = #{projectId}) as b where e.id = b.evaluation_id)as m where cer.evaluation_id = m.id) AS n WHERE consultant.id = n.consultant_id
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

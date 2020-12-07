@@ -16,6 +16,7 @@ import com.waymap.custevalusys.service.CustomerService;
 import com.waymap.custevalusys.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,5 +102,13 @@ public class CustomerController {
         String username = jwtTokenUtil.getUserNameFromToken(token);
         Customer customer = customerService.getCustByUsername(username);
         return CommonResult.success(customer,"当前用户");
+    }
+
+    @ApiOperation(value = "获取用户评价")
+    @RequestMapping(value = "/getFeedBack",method = RequestMethod.GET)
+    public CommonResult getCurrentFeedBack(@RequestParam(name = "pageNum",defaultValue = "1") @ApiParam(name = "pageNum",value = "当前页数") Integer pageNum,
+                                           @RequestParam(name = "pageSize",defaultValue = "5") @ApiParam(name = "pageSize",value = "每页显示多少条") Integer pageSize){
+        List<Customer> customerList =  customerService.getCustFeedBack(pageNum,pageSize);
+        return CommonResult.success(customerList,"成功获取用户评价");
     }
 }

@@ -8,6 +8,8 @@
 package com.waymap.custevalusys.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.waymap.custevalusys.bo.CustUserDetails;
 import com.waymap.custevalusys.common.Asserts;
 import com.waymap.custevalusys.dto.CreateCountParm;
@@ -138,5 +140,12 @@ public class CustomerServiceImpl implements CustomerService {
             return new CustUserDetails(customer);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
+    }
+
+    @Override
+    public List<Customer> getCustFeedBack(Integer pageNum, Integer pageSize) {
+        Page<Customer> page = new Page<>(pageNum,pageSize);
+        IPage<Customer> result = customerMapper.selectCustFeedBackInfo(page);
+        return result.getRecords();
     }
 }

@@ -8,13 +8,17 @@
 package com.waymap.custevalusys.controller;
 
 import com.waymap.custevalusys.common.CommonResult;
+import com.waymap.custevalusys.dto.ConsultantEvalution;
+import com.waymap.custevalusys.dto.ConsultantEvalutionListParm;
 import com.waymap.custevalusys.dto.SaveEvaluationParm;
 import com.waymap.custevalusys.service.EvaluationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.Request;
 
 /**
  * @author : tiger
@@ -30,9 +34,9 @@ public class EvaluationController {
     @Autowired
     private EvaluationService evaluationService;
 
-    @ApiOperation("保存评价")
+    @ApiOperation("提交用户评价")
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public CommonResult saveEvaluation(@Validated @RequestBody SaveEvaluationParm parm){
+    public CommonResult saveEvaluation(@Validated @RequestBody @ApiParam(name = "SaveEvaluationParm",value = "保存的用户评价",required = true)SaveEvaluationParm parm){
         int number = evaluationService.saveEvaluation(parm);
         if(number == -1){
             return CommonResult.failed("该用户已经评价过了");
@@ -45,8 +49,10 @@ public class EvaluationController {
 
     @ApiOperation("获取顾问评估清单(以项目为维度)")
     @RequestMapping(value = "/getList",method = RequestMethod.GET)
-    public CommonResult getConsultantEvaluationList(@Validated @RequestParam Integer projectId){
-
-        return null;
+    public CommonResult getConsultantEvaluationList(@Validated @RequestParam(required = true) @ApiParam(name = "projectId",value = "项目Id",required = true)Integer projectId,
+                                                    @RequestParam(value = "pageNum", defaultValue = "1") @ApiParam(name = "PageNum",value = "当前页数")Integer pageNum,
+                                                    @RequestParam(value = "pageSize", defaultValue = "5") @ApiParam(name = "PageSize",value = "每页显示多少条")Integer pageSize){
+        ConsultantEvalutionListParm parm = evaluationService.selectCustEvaluationList(projectId,pageNum,pageSize);
+        return CommonResult.success(parm,"成功获取顾问评估清单(以项目为维度)");
     }
 }

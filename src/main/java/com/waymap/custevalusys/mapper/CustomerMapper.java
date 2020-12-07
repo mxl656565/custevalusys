@@ -1,6 +1,8 @@
 package com.waymap.custevalusys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.waymap.custevalusys.model.Customer;
 import com.waymap.custevalusys.model.CustomerExample;
 import java.util.List;
@@ -14,6 +16,8 @@ public interface CustomerMapper extends BaseMapper<Customer> {
     int deleteByPrimaryKey(Integer id);
 
     int insertSelective(Customer record);
+
+    IPage<Customer> selectCustFeedBackInfo(IPage<Customer> page);
 
     List<Customer> selectByExample(CustomerExample example);
 

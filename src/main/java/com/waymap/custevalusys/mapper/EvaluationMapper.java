@@ -1,6 +1,8 @@
 package com.waymap.custevalusys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.waymap.custevalusys.dto.ConsultantEvalution;
 import com.waymap.custevalusys.model.Evaluation;
 import com.waymap.custevalusys.model.EvaluationExample;
 
@@ -22,6 +24,8 @@ public interface EvaluationMapper extends BaseMapper<Evaluation> {
     List<Evaluation> selectByExample(EvaluationExample example);
 
     Integer insertOneRecAndGetId(Evaluation evaluation);
+
+    IPage<ConsultantEvalution> selectEvaluationByProjectId(IPage<ConsultantEvalution> page,Integer projectId);
 
     Evaluation selectByPrimaryKey(Integer id);
 

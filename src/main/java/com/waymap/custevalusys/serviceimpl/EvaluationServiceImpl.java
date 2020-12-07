@@ -7,6 +7,9 @@
  */
 package com.waymap.custevalusys.serviceimpl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.waymap.custevalusys.dto.ConsultantEvalution;
 import com.waymap.custevalusys.dto.ConsultantPoint;
 import com.waymap.custevalusys.dto.ConsultantEvalutionListParm;
 import com.waymap.custevalusys.dto.SaveEvaluationParm;
@@ -17,6 +20,7 @@ import com.waymap.custevalusys.model.*;
 import com.waymap.custevalusys.service.ConsultantService;
 import com.waymap.custevalusys.service.CustomerService;
 import com.waymap.custevalusys.service.EvaluationService;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,28 +64,34 @@ public class EvaluationServiceImpl implements EvaluationService {
         String feedback = parm.getFeedback();
         Long evaluationTime = parm.getEvaluatime();
 
-        List<ConsultantPoint> consultantEvalutionList =  parm.getConsultantEvalution();
+        List<ConsultantPoint> consultantEvalutionList = parm.getConsultantPoint();
         Evaluation evaluation = new Evaluation();
         ConsultantEvaluationRelation consultantEvaluationRelation = new ConsultantEvaluationRelation();
         CustomerEvaluationRelation customerEvaluationRelation = new CustomerEvaluationRelation();
         Integer question = null;
-        try{
+        try {
             Customer customer = customerService.getCustById(customerId);
-            if(customer.getFeedback()!=null||customer.getEvaluatime()!=null){
+            if (customer.getFeedback() != null || customer.getEvaluatime() != null) {
                 return -1;
             }
-            for(int i=0;i<consultantEvalutionList.size();i++){
+            for (int i = 0; i < consultantEvalutionList.size(); i++) {
                 ConsultantPoint consultantEvalution = consultantEvalutionList.get(i);
                 Integer consultantId = consultantEvalution.getConsultantId();
                 //判断顾问是否存在
-                if(!consultantService.queryConsultantIsExists(consultantId)){
+                if (!consultantService.queryConsultantIsExists(consultantId)) {
                     return -2;
                 }
-                for(int x=1;x<4;x++){
-                    switch (x){
-                        case 1: question = consultantEvalution.getQuestion1(); break;
-                        case 2: question = consultantEvalution.getQuestion2(); break;
-                        case 3: question = consultantEvalution.getQuestion3(); break;
+                for (int x = 1; x < 4; x++) {
+                    switch (x) {
+                        case 1:
+                            question = consultantEvalution.getQuestion1();
+                            break;
+                        case 2:
+                            question = consultantEvalution.getQuestion2();
+                            break;
+                        case 3:
+                            question = consultantEvalution.getQuestion3();
+                            break;
                         default:
                     }
                     evaluation.setQuestion(x);
@@ -91,18 +101,18 @@ public class EvaluationServiceImpl implements EvaluationService {
                     Integer evaluationId = saveOneEvaluation(evaluation);
                     //维护顾问与评价表的关系
                     consultantEvaluationRelation.setConsultantId(consultantId)
-                                                .setEvaluationId(evaluationId);
+                            .setEvaluationId(evaluationId);
                     consultantEvaluationRelationMapper.insert(consultantEvaluationRelation);
                     //维护客户与评价表的关系
                     customerEvaluationRelation.setCustomerId(customerId)
-                                              .setEvaluationId(evaluationId);
+                            .setEvaluationId(evaluationId);
                     customerEvaluationRelationMapper.insert(customerEvaluationRelation);
                 }
             }
             customer.setFeedback(feedback).setEvaluatime(new Date(evaluationTime));
             customerService.insertCustomerFeedBack(customer);
-        }catch (Exception e){
-            LOGGER.warn("保存顾问评价异常:{}",e.getMessage());
+        } catch (Exception e) {
+            LOGGER.warn("保存顾问评价异常:{}", e.getMessage());
         }
         return 1;
     }
@@ -114,13 +124,12 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public List<ConsultantEvalutionListParm> selectCustEvaluationList(Integer projectId) {
-
-        //1.用projectId查询到该项目下有多少个客户
-
-        //2.用客户Id查询客户和评价的关系表得到该客户的所有评价
-
-        //3.再用评价Id查询顾问和评价的关系表得到哪几条评价是评价该顾问的
-        return null;
+    public ConsultantEvalutionListParm selectCustEvaluationList(Integer projectId, Integer PageNum, Integer PageSize) {
+        Page<ConsultantEvalution> page = new Page<>(PageNum, PageSize);
+        IPage<ConsultantEvalution> result = evaluationMapper.selectEvaluationByProjectId(page, projectId);
+        List<ConsultantEvalution> consultantEvalutionList = result.getRecords();
+        ConsultantEvalutionListParm parm = new ConsultantEvalutionListParm();
+        parm.setConsultantEvalutionList(consultantEvalutionList);
+        return parm;
     }
 }
