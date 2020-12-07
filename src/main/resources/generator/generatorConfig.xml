@@ -44,10 +44,13 @@
         <table tableName="customer" domainObjectName="Customer" >
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="consultant_customer_relation" domainObjectName="ConsultantCustomerRelation" >
+        <table tableName="customer_evaluation_relation" domainObjectName="CustomerEvaluationRelation" >
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="consultant_evaluation_relation" domainObjectName="ConsultantEvaluationRelation" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="consultant_project_relation" domainObjectName="ConsultantProjectRelation" >
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="consultant" domainObjectName="Consultant" >

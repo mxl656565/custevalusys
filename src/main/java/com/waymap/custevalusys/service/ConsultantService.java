@@ -30,4 +30,11 @@ public interface ConsultantService {
      * @return 顾问对象
      */
     Consultant findConsultantByName(String consultantName);
+
+    /**
+     * 通过顾问id查询是否存在这个顾问
+     * @param consultantId 顾问id
+     * @return 是否存在
+     */
+    boolean queryConsultantIsExists(Integer consultantId);
 }

@@ -58,8 +58,8 @@ public class ConsultantServiceImpl implements ConsultantService {
                 newConsultant.setName(createConsultant.getName());
                 consultantMapper.insert(newConsultant);
                 newConsultant = findConsultantByName(newConsultant.getName());
-                consultantProjectRelation.setConsultantId(newConsultant.getId());
-                consultantProjectRelation.setProjectId(project.getId());
+                consultantProjectRelation.setConsultantId(newConsultant.getId())
+                                         .setProjectId(project.getId());
                 consultantProjectRelationMapper.insert(consultantProjectRelation);
                 return newConsultant;
             }else{
@@ -72,8 +72,8 @@ public class ConsultantServiceImpl implements ConsultantService {
                     return null;
                 }
                 //没有则创建记录
-                consultantProjectRelation.setConsultantId(consultant.getId());
-                consultantProjectRelation.setProjectId(project.getId());
+                consultantProjectRelation.setConsultantId(consultant.getId())
+                                         .setProjectId(project.getId());
                 consultantProjectRelationMapper.insert(consultantProjectRelation);
             }
         }catch (Exception e){
@@ -87,5 +87,14 @@ public class ConsultantServiceImpl implements ConsultantService {
         QueryWrapper<Consultant> queryWrapper =  new QueryWrapper<>();
         queryWrapper.eq("name",consultantName);
         return consultantMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public boolean queryConsultantIsExists(Integer consultantId) {
+        Consultant consultant = consultantMapper.selectByPrimaryKey(consultantId);
+        if(consultant != null){
+            return true;
+        }
+        return false;
     }
 }

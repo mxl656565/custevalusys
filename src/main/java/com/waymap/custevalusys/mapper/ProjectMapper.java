@@ -1,6 +1,7 @@
 package com.waymap.custevalusys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.waymap.custevalusys.model.Evaluation;
 import com.waymap.custevalusys.model.Project;
 import com.waymap.custevalusys.model.ProjectExample;
 import java.util.List;
@@ -16,6 +17,8 @@ public interface ProjectMapper extends BaseMapper<Project> {
     int insertSelective(Project record);
 
     List<Project> selectByExample(ProjectExample example);
+
+    Integer insertOneRecAndGetId(Project project);
 
     Project selectByPrimaryKey(Integer id);
 

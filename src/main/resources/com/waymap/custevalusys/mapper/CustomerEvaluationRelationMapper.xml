@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.waymap.custevalusys.mapper.ConsultantCustomerRelationMapper">
-  <resultMap id="BaseResultMap" type="com.waymap.custevalusys.model.ConsultantCustomerRelation">
+<mapper namespace="com.waymap.custevalusys.mapper.CustomerEvaluationRelationMapper">
+  <resultMap id="BaseResultMap" type="com.waymap.custevalusys.model.CustomerEvaluationRelation">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="consultant_id" jdbcType="INTEGER" property="consultantId" />
     <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="evaluation_id" jdbcType="INTEGER" property="evaluationId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, consultant_id, customer_id
+    id, customer_id, evaluation_id
   </sql>
-  <select id="selectByExample" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from consultant_customer_relation
+    from customer_evaluation_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,65 +84,65 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from consultant_customer_relation
+    from customer_evaluation_relation
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from consultant_customer_relation
+    delete from customer_evaluation_relation
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelationExample">
-    delete from consultant_customer_relation
+  <delete id="deleteByExample" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelationExample">
+    delete from customer_evaluation_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelation">
+  <insert id="insert" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into consultant_customer_relation (consultant_id, customer_id)
-    values (#{consultantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER})
+    insert into customer_evaluation_relation (customer_id, evaluation_id)
+    values (#{customerId,jdbcType=INTEGER}, #{evaluationId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelation">
+  <insert id="insertSelective" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into consultant_customer_relation
+    insert into customer_evaluation_relation
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="consultantId != null">
-        consultant_id,
-      </if>
       <if test="customerId != null">
         customer_id,
       </if>
+      <if test="evaluationId != null">
+        evaluation_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="consultantId != null">
-        #{consultantId,jdbcType=INTEGER},
-      </if>
       <if test="customerId != null">
         #{customerId,jdbcType=INTEGER},
       </if>
+      <if test="evaluationId != null">
+        #{evaluationId,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelationExample" resultType="java.lang.Long">
-    select count(*) from consultant_customer_relation
+  <select id="countByExample" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelationExample" resultType="java.lang.Long">
+    select count(*) from customer_evaluation_relation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update consultant_customer_relation
+    update customer_evaluation_relation
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.consultantId != null">
-        consultant_id = #{record.consultantId,jdbcType=INTEGER},
-      </if>
       <if test="record.customerId != null">
         customer_id = #{record.customerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.evaluationId != null">
+        evaluation_id = #{record.evaluationId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -150,30 +150,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update consultant_customer_relation
+    update customer_evaluation_relation
     set id = #{record.id,jdbcType=INTEGER},
-      consultant_id = #{record.consultantId,jdbcType=INTEGER},
-      customer_id = #{record.customerId,jdbcType=INTEGER}
+      customer_id = #{record.customerId,jdbcType=INTEGER},
+      evaluation_id = #{record.evaluationId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelation">
-    update consultant_customer_relation
+  <update id="updateByPrimaryKeySelective" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelation">
+    update customer_evaluation_relation
     <set>
-      <if test="consultantId != null">
-        consultant_id = #{consultantId,jdbcType=INTEGER},
-      </if>
       <if test="customerId != null">
         customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationId != null">
+        evaluation_id = #{evaluationId,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.waymap.custevalusys.model.ConsultantCustomerRelation">
-    update consultant_customer_relation
-    set consultant_id = #{consultantId,jdbcType=INTEGER},
-      customer_id = #{customerId,jdbcType=INTEGER}
+  <update id="updateByPrimaryKey" parameterType="com.waymap.custevalusys.model.CustomerEvaluationRelation">
+    update customer_evaluation_relation
+    set customer_id = #{customerId,jdbcType=INTEGER},
+      evaluation_id = #{evaluationId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

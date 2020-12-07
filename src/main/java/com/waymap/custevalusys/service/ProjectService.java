@@ -8,7 +8,10 @@
 package com.waymap.custevalusys.service;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.waymap.custevalusys.model.Consultant;
 import com.waymap.custevalusys.model.Project;
+
+import java.util.List;
 
 /**
  * @author : tiger
@@ -26,4 +29,9 @@ public interface ProjectService {
      * 插入新的项目
      */
     int insertProject(Project project);
+
+    /**
+     * 查询该项目下有哪些顾问
+     */
+    List<Consultant> selectConsultantInProject(Integer projectId);
 }

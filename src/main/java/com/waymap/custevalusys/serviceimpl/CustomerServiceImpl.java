@@ -78,16 +78,14 @@ public class CustomerServiceImpl implements CustomerService {
             if(customers.size()>0){
                 return null;
             }
-            customer.setUsername(createCountParm.getUsername());
+
             String enablePasswrod = passwordEncoder.encode(createCountParm.getPassword());
-            customer.setPassword(enablePasswrod);
-            customer.setNickname(createCountParm.getNickname());
+            customer.setUsername(createCountParm.getUsername()).setPassword(enablePasswrod).setNickname(createCountParm.getNickname());
             Project project = projectService.findProjectByProjectName(createCountParm.getProjectname());
             if(project==null){
                 newProject.setProjectname(createCountParm.getProjectname());
-                projectService.insertProject(newProject);
-                newProject = projectService.findProjectByProjectName(newProject.getProjectname());
-                customer.setProjectId(newProject.getId());
+                Integer projectId = projectService.insertProject(newProject);
+                customer.setProjectId(projectId);
             }
             customer.setProjectId(newProject.getId());
             customerMapper.insert(customer);
@@ -103,6 +101,11 @@ public class CustomerServiceImpl implements CustomerService {
         queryWrapper.eq("username",username);
         Customer customer = customerMapper.selectOne(queryWrapper);
         return customer;
+    }
+
+    @Override
+    public void insertCustomerFeedBack(Customer customer) {
+        customerMapper.updateById(customer);
     }
 
     @Override

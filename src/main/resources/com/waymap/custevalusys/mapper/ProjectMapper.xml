@@ -96,12 +96,8 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.waymap.custevalusys.model.Project">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into project (projectname)
-    values (#{projectname,jdbcType=VARCHAR})
+  <insert id="insertOneRecAndGetId" parameterType="com.waymap.custevalusys.model.Project" useGeneratedKeys="true" keyProperty="id">
+	insert into evaluation(projectname) values(#{projectname})
   </insert>
   <insert id="insertSelective" parameterType="com.waymap.custevalusys.model.Project">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">

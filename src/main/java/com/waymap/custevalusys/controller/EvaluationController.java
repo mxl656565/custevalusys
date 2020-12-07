@@ -7,7 +7,6 @@
  */
 package com.waymap.custevalusys.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.waymap.custevalusys.common.CommonResult;
 import com.waymap.custevalusys.dto.SaveEvaluationParm;
 import com.waymap.custevalusys.service.EvaluationService;
@@ -16,9 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author : tiger
@@ -36,10 +32,15 @@ public class EvaluationController {
 
     @ApiOperation("保存评价")
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public CommonResult saveEvaluation(@RequestParam String evaluList){
-        JSONObject paramsObj = JSONObject.parseObject(evaluList);
-        String project = (String)paramsObj.get("project");
-        return null;
+    public CommonResult saveEvaluation(@Validated @RequestBody SaveEvaluationParm parm){
+        int number = evaluationService.saveEvaluation(parm);
+        if(number == -1){
+            return CommonResult.failed("该用户已经评价过了");
+        }
+        if(number == -2){
+            return CommonResult.failed("顾问不存在,保存失败");
+        }
+        return CommonResult.success("保存客户评价成功");
     }
 
     @ApiOperation("获取顾问评估清单(以项目为维度)")

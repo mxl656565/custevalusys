@@ -41,6 +41,12 @@ public interface CustomerService {
     Customer getCustByUsername(String username);
 
     /**
+     * 添加客户的意见反馈
+     * @param customer 客户
+     */
+    void insertCustomerFeedBack(Customer customer);
+
+    /**
      * 刷新token
      * @param oldToken 旧的token
      */

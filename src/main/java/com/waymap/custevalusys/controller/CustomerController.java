@@ -90,7 +90,7 @@ public class CustomerController {
         if(flag==-1){
             return CommonResult.failed("修改密码失败，原密码错误");
         }
-        return CommonResult.success(null,"修改密码成功");
+        return CommonResult.success("修改密码成功");
     }
 
     @ApiOperation(value = "获取当前用户")
